@@ -1,0 +1,236 @@
+:root {
+    --bg-primary: #121214;
+    --bg-surface: #1a1a1e;
+    --text-main: #e1e1e6;
+    --text-muted: #a8a8b3;
+    --brand: #00b37e;
+    --brand-hover: #00875f;
+    --danger: #f75a68;
+    --danger-hover: #c73e4a;
+    --border: #29292e;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+#auth-container {
+    max-width: 450px;
+    background: var(--bg-surface);
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin: 60px auto 0 auto;
+}
+
+h2, h3 {
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-muted);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--brand);
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+}
+
+.btn:hover {
+    background: var(--brand-hover);
+}
+
+.btn-danger {
+    background: var(--danger);
+}
+
+.btn-danger:hover {
+    background: var(--danger-hover);
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    width: auto;
+    margin: 2px;
+}
+
+.toggle-text {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.toggle-text span {
+    color: var(--brand);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-surface);
+    padding: 15px 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin-bottom: 25px;
+}
+
+header .btn {
+    width: auto;
+}
+
+.badge {
+    background: var(--brand);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--bg-surface);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.form-inline {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.form-inline input, .form-inline select {
+    width: auto;
+    flex-grow: 1;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: left;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background-color: #202024;
+    color: var(--text-muted);
+}
+
+.list-items li {
+    background: var(--bg-primary);
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.success-text {
+    color: var(--brand);
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    background: var(--bg-surface);
+    padding: 25px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid var(--border);
+}
+
+.modal-content .btn {
+    margin-top: 10px;
+}
