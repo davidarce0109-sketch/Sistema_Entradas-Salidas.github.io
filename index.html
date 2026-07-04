@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Control de Accesos</title>
+    <link rel="stylesheet" href="index.css">
+    <!-- Librería QR (Html5Qrcode) para escanear con la cámara -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+</head>
+<body>
+
+    <!-- PANTALLA DE LOGUEO Y REGISTRO -->
+    <div id="auth-container" class="container">
+        <h2 id="auth-title">Iniciar Sesión</h2>
+        
+        <div class="form-group">
+            <label for="role-select">Seleccione su Rol (RF-01):</label>
+            <select id="role-select">
+                <option value="Instructor">Instructor</option>
+                <option value="Guardia">Guardia de Seguridad</option>
+                <option value="Administrativo">Administrativo</option>
+            </select>
+        </div>
+
+        <!-- Campos de Login -->
+        <div id="login-fields">
+            <div class="form-group">
+                <label for="login-doc">Documento de Identidad:</label>
+                <input type="text" id="login-doc" placeholder="Ingrese su documento">
+            </div>
+            <div class="form-group">
+                <label for="login-pass">Contraseña:</label>
+                <input type="password" id="login-pass" placeholder="Ingrese su contraseña">
+            </div>
+            <button id="btn-login" class="btn">Ingresar</button>
+            <p class="toggle-text">¿No tienes cuenta? <span id="go-to-register">Regístrate aquí</span></p>
+        </div>
+
+        <!-- Campos de Registro (Instructores / Guardias) -->
+        <div id="register-fields" class="hidden">
+            <div class="form-group">
+                <label for="reg-doc">Documento de Identidad:</label>
+                <input type="text" id="reg-doc">
+            </div>
+            <div class="form-group">
+                <label for="reg-name">Nombre Completo:</label>
+                <input type="text" id="reg-name">
+            </div>
+            <div class="form-group">
+                <label for="reg-pass">Contraseña:</label>
+                <input type="password" id="reg-pass">
+            </div>
+            <div class="form-group">
+                <label for="reg-confirm-pass">Confirmar Contraseña:</label>
+                <input type="password" id="reg-confirm-pass">
+            </div>
+            <button id="btn-register" class="btn">Registrarse</button>
+            <p class="toggle-text">¿Ya tienes cuenta? <span id="go-to-login">Inicia Sesión</span></p>
+        </div>
+    </div>
+
+    <!-- HEADER DE LA APLICACIÓN (Se muestra al loguearse) -->
+    <header id="app-header" class="hidden">
+        <div>
+            <h1 id="user-display-name">Bienvenido</h1>
+            <span id="user-display-role" class="badge">Rol</span>
+        </div>
+        <button id="btn-logout" class="btn btn-danger">Cerrar Sesión</button>
+    </header>
+
+    <!-- PANEL ADMINISTRATIVO (RF-07) -->
+    <main id="panel-administrative" class="container dashboard hidden">
+        <h2>Panel de Control Administrativo</h2>
+        
+        <!-- Gestión de Usuarios -->
+        <section class="card">
+            <h3>Gestión de Personal (Guardias e Instructores)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Documento</th>
+                            <th>Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-table"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Asignación de Fichas (RF-14) -->
+        <section class="card">
+            <h3>Asignar Fichas a Instructores</h3>
+            <div class="form-inline">
+                <select id="admin-select-instructor"><option value="">Seleccione Instructor...</option></select>
+                <input type="text" id="admin-input-ficha" placeholder="Ej: Ficha 2712345">
+                <button id="btn-assign-ficha" class="btn">Asignar Ficha</button>
+            </div>
+            <ul id="assigned-fichas-list" class="list-items"></ul>
+        </section>
+
+        <!-- Historial / Filtrado por fecha (RF-15 y RF-29) -->
+        <section class="card">
+            <h3>Consolidado de Visitantes e Invitados</h3>
+            <div class="form-inline">
+                <label for="admin-filter-date">Filtrar por Fecha:</label>
+                <input type="date" id="admin-filter-date">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Motivo</th>
+                            <th>Ingreso</th>
+                            <th>Salida</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-visitors-table"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- PANEL GUARDIA DE SEGURIDAD (RF-08) -->
+    <main id="panel-guard" class="container dashboard hidden">
+        <h2>Panel de Control - Guardia de Seguridad</h2>
+
+        <!-- Lector QR (RF-16 / RF-23) -->
+        <section class="card">
+            <h3>Escanear Código QR Aprendiz</h3>
+            <div id="qr-reader" style="max-width: 400px; margin: auto;"></div>
+            <div id="qr-result" class="success-text"></div>
+        </section>
+
+        <!-- Registro Manual Aprendiz (RF-17) y Visitantes (RF-19) -->
+        <section class="card-grid">
+            <div class="card">
+                <h3>Ingreso Manual Aprendiz</h3>
+                <div class="form-group"><input type="text" id="guard-ap-doc" placeholder="Documento"></div>
+                <div class="form-group"><input type="text" id="guard-ap-name" placeholder="Nombre Completo"></div>
+                <div class="form-group"><input type="text" id="guard-ap-ficha" placeholder="Ficha de Programa"></div>
+                <button id="btn-guard-save-ap" class="btn">Registrar Entrada Aprendiz</button>
+            </div>
+
+            <div class="card">
+                <h3>Ingreso Manual Visitante</h3>
+                <div class="form-group"><input type="text" id="guard-vis-doc" placeholder="Documento"></div>
+                <div class="form-group"><input type="text" id="guard-vis-name" placeholder="Nombre Completo"></div>
+                <div class="form-group"><input type="text" id="guard-vis-motivo" placeholder="Motivo de Visita"></div>
+                <button id="btn-guard-save-vis" class="btn">Registrar Entrada Visitante</button>
+            </div>
+        </section>
+
+        <!-- Listas y Control de Salidas (RF-18, RF-20, RF-21, RF-22) -->
+        <section class="card">
+            <h3>Control Diario de Aprendices en Instalaciones</h3>
+            <div class="form-inline">
+                <input type="text" id="guard-search-ap" placeholder="Buscar por Nombre o Documento...">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ficha</th>
+                            <th>Nombre</th>
+                            <th>Documento</th>
+                            <th>Ingreso</th>
+                            <th>Salida</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guard-ap-table"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Control Salida Visitantes -->
+        <section class="card">
+            <h3>Control Diario de Visitantes</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Motivo</th>
+                            <th>Ingreso</th>
+                            <th>Salida</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guard-vis-table"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- PANEL INSTRUCTOR (RF-09) -->
+    <main id="panel-instructor" class="container dashboard hidden">
+        <h2>Panel de Control - Instructores</h2>
+
+        <!-- Listado de Aprendices Asignados (RF-25 y RF-26) -->
+        <section class="card">
+            <h3>Aprendices Ingresados Hoy en tus Fichas</h3>
+            <div class="form-inline">
+                <label for="inst-ficha-select">Seleccionar Ficha Asignada:</label>
+                <select id="inst-ficha-select"><option value="">-- Seleccione --</option></select>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Ficha</th>
+                            <th>Hora Ingreso</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inst-ap-table"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Historial y Eliminación de Observaciones (RF-27 y RF-28) -->
+        <section class="card">
+            <h3>Historial de Observaciones Realizadas</h3>
+            <div class="form-inline">
+                <label for="inst-filter-date">Filtrar por Fecha:</label>
+                <input type="date" id="inst-filter-date">
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Ficha</th>
+                            <th>Aprendiz</th>
+                            <th>Observación</th>
+                            <th>Autor</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inst-history-table"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Simple para Agregar Observaciones del Instructor -->
+    <div id="observation-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Agregar Observación (RF-24 / RF-26)</h3>
+            <input type="hidden" id="obs-ap-id">
+            <div class="form-group">
+                <textarea id="obs-text" rows="4" placeholder="Escriba la observación aquí..."></textarea>
+            </div>
+            <button id="btn-save-obs" class="btn">Guardar</button>
+            <button id="btn-close-modal" class="btn btn-danger">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Script Principal como Módulo -->
+    <script type="module" src="index.js"></script>
+</body>
+</html>
