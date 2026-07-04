@@ -1,10 +1,13 @@
-import { initializeApp } from "firebase/app";
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+// IMPORTACIONES CORRECTAS DESDE CDN (Se incluye addDoc y onSnapshot que usas abajo)
 import { 
     getFirestore, collection, doc, setDoc, getDoc, getDocs, 
     updateDoc, deleteDoc, query, where, addDoc, onSnapshot 
-} from "firebase/firestore";
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Configuración de tu base de datos Firebase enviada
+// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDHn60EuXZEbi2SijvKsnm2JBRxtjEWvDg",
   authDomain: "sistema-de-entradas-y-sa-4f89f.firebaseapp.com",
@@ -14,8 +17,11 @@ const firebaseConfig = {
   appId: "1:579466318121:web:0f21c1aa692dc6a9afa738"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// ... El resto de tu código de index.js sigue igual hacia abajo ...
 
 // Estado de la Sesión Local
 let currentUser = null;
